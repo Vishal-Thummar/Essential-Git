@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Commands Portal | Professional Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e14;
+            --bg-secondary: #151b26;
+            --bg-tertiary: #1f2937;
+            --accent-primary: #00d4ff;
+            --accent-secondary: #7c3aed;
+            --accent-gradient: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
+            --text-primary: #e5e7eb;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --border-color: #374151;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+            --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.03;
+            background-image:
+                linear-gradient(90deg, var(--accent-primary) 1px, transparent 1px),
+                linear-gradient(0deg, var(--accent-primary) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 4rem 2rem 3rem;
+            position: relative;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: var(--shadow-glow);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            animation: fadeInDown 0.8s ease 0.2s both;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease 0.4s both;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Controls Bar */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            animation: fadeIn 0.8s ease 0.6s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.875rem 1.5rem;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            border-color: var(--accent-primary);
+            background: var(--bg-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn.active {
+            background: var(--accent-gradient);
+            border-color: transparent;
+            color: white;
+        }
+
+        .lang-toggle {
+            background: var(--accent-gradient);
+            border: none;
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Category Navigation */
+        .category-nav {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            animation: slideInLeft 0.8s ease 0.8s both;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .category-nav::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .category-nav::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 3px;
+        }
+
+        .category-nav::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 3px;
+        }
+
+        .category-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .category-btn.active {
+            background: var(--accent-gradient);
+            border-color: transparent;
+            color: white;
+        }
+
+        /* Command Sections */
+        .command-section {
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.6s ease both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .section-number {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .section-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        /* Command Grid */
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .command-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .command-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .command-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .command-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .command-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .command-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            background: var(--bg-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            flex: 1;
+        }
+
+        .copy-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .command-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .command-example {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .command-card.expanded .command-example {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+
+        .example-label {
+            font-size: 0.85rem;
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .example-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .expand-icon {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .command-card.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            border-top: 2px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        .footer-text {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .command-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-nav {
+                flex-wrap: nowrap;
+            }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--success);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            transform: translateY(200%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--bg-tertiary);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">git</div>
+            </div>
+            <h1 id="mainTitle">Git Commands Portal</h1>
+            <p class="subtitle" id="subtitle">Complete professional reference with real-world examples</p>
+        </header>
+
+        <div class="controls">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search commands... (e.g., commit, branch, merge)">
+            </div>
+            <div class="button-group">
+                <button class="btn lang-toggle" id="langToggle">
+                    🌐 <span id="langText">ગુજરાતી</span>
+                </button>
+                <button class="btn" id="expandAll">📂 Expand All</button>
+                <button class="btn" id="collapseAll">📁 Collapse All</button>
+            </div>
+        </div>
+
+        <div class="category-nav" id="categoryNav">
+            <button class="category-btn active" data-category="all">All Commands</button>
+            <button class="category-btn" data-category="config">Configuration</button>
+            <button class="category-btn" data-category="workflow">Workflow</button>
+            <button class="category-btn" data-category="branching">Branching</button>
+            <button class="category-btn" data-category="remote">Remote Sync</button>
+            <button class="category-btn" data-category="inspection">Inspection</button>
+            <button class="category-btn" data-category="undo">Undo & Fix</button>
+        </div>
+
+        <div id="commandsContainer"></div>
+
+        <footer>
+            <p class="footer-text">Built for developers worldwide</p>
+
+        </footer>
+    </div>
+
+    <div class="toast" id="toast">
+        ✓ Command copied to clipboard!
+    </div>
+
+    <script>
+        const gitCommands = {
+            en: {
+                title: "Git Commands Portal",
+                subtitle: "Complete professional reference with real-world examples",
+                searchPlaceholder: "Search commands... (e.g., commit, branch, merge)",
+                langButton: "ગુજરાતી",
+                expandAll: "📂 Expand All",
+                collapseAll: "📁 Collapse All",
+                categories: {
+                    all: "All Commands",
+                    config: "Configuration",
+                    workflow: "Workflow",
+                    branching: "Branching",
+                    remote: "Remote Sync",
+                    inspection: "Inspection",
+                    undo: "Undo & Fix"
+                },
+                sections: [
+                    {
+                        id: "config",
+                        number: "01",
+                        title: "Configuration & Setup",
+                        description: "Before you write a single line of code, you must configure your environment.",
+                        commands: [
+                            {
+                                command: "git version",
+                                description: "Checks the installed version of Git.",
+                                example: "Real-world use: Before starting a project, verify Git is installed and check which version you're running to ensure compatibility with team tools."
+                            },
+                            {
+                                command: "git config --global user.name \"Name\"",
+                                description: "Sets your identity for all commits.",
+                                example: "Real-world use: When you join a new team, set your name so all your commits are properly attributed to you in the project history."
+                            },
+                            {
+                                command: "git config --global user.email \"mail\"",
+                                description: "Sets your email address (must match your GitHub/GitLab email).",
+                                example: "Real-world use: Configure your work email for company projects and personal email for side projects. This ensures commits link to the correct account."
+                            },
+                            {
+                                command: "git config --global color.ui true",
+                                description: "Enables helpful color highlighting in the terminal.",
+                                example: "Real-world use: Makes Git output easier to read by coloring different types of information (additions in green, deletions in red, etc.)."
+                            },
+                            {
+                                command: "git config --list",
+                                description: "Lists all configuration settings currently applied.",
+                                example: "Real-world use: When troubleshooting issues or onboarding a new machine, review all your Git settings to ensure everything is configured correctly."
+                            },
+                            {
+                                command: "git init",
+                                description: "Initializes a new, empty Git repository in the current folder.",
+                                example: "Real-world use: Starting a new project from scratch? Run this in your project folder to begin tracking changes with Git."
+                            },
+                            {
+                                command: "git clone <url>",
+                                description: "Downloads an existing repository from a remote server (like GitHub).",
+                                example: "Real-world use: Your team has a project on GitHub. Clone it to your machine to start contributing: git clone https://github.com/company/project.git"
+                            }
+                        ]
+                    },
+                    {
+                        id: "workflow",
+                        number: "02",
+                        title: "The Core Workflow (Stage & Commit)",
+                        description: "This is the cycle you will repeat dozens of times a day: Modify → Stage → Commit.",
+                        commands: [
+                            {
+                                command: "git status",
+                                description: "Crucial. Shows which files are modified, staged, or untracked.",
+                                example: "Real-world use: After editing files, run this to see what changed before committing. It's your safety check to avoid committing the wrong files."
+                            },
+                            {
+                                command: "git add <file>",
+                                description: "Adds a specific file to the staging area.",
+                                example: "Real-world use: You fixed a bug in app.js. Stage only that file: git add app.js, so you can commit just the bug fix without other unfinished work."
+                            },
+                            {
+                                command: "git add .",
+                                description: "Adds all changed files in the current directory to staging.",
+                                example: "Real-world use: You've finished a feature that touched multiple files. Add them all at once: git add . before committing."
+                            },
+                            {
+                                command: "git add -p",
+                                description: "Patch mode. Allows you to stage parts of a file interactively.",
+                                example: "Real-world use: You made two separate fixes in one file. Use git add -p to stage each fix separately, creating cleaner, more focused commits."
+                            },
+                            {
+                                command: "git rm <file>",
+                                description: "Deletes a file from both the working directory and the index.",
+                                example: "Real-world use: Removing an obsolete config file from the project: git rm old-config.json stages the deletion for the next commit."
+                            },
+                            {
+                                command: "git rm --cached <file>",
+                                description: "Removes a file from Git tracking but keeps it on your local disk.",
+                                example: "Real-world use: You accidentally committed .env with secrets. Use git rm --cached .env to untrack it while keeping your local copy safe."
+                            },
+                            {
+                                command: "git commit -m \"Message\"",
+                                description: "Records the snapshot with a message.",
+                                example: "Real-world use: After staging files, save your changes: git commit -m \"Fix login bug\" creates a permanent record in the project history."
+                            },
+                            {
+                                command: "git commit -am \"Message\"",
+                                description: "Shortcuts git add and git commit in one command (tracked files only).",
+                                example: "Real-world use: Quick commits for small changes to already-tracked files: git commit -am \"Update README\" skips the staging step."
+                            },
+                            {
+                                command: "git commit --amend",
+                                description: "Modifies the last commit (useful to fix a typo in the message).",
+                                example: "Real-world use: Just committed but forgot a file? Stage it and run git commit --amend to add it to the previous commit without creating a new one."
+                            }
+                        ]
+                    },
+                    {
+                        id: "branching",
+                        number: "03",
+                        title: "Branching & Merging",
+                        description: "Branching allows you to work on new features without breaking the main code.",
+                        commands: [
+                            {
+                                command: "git branch",
+                                description: "Lists all local branches.",
+                                example: "Real-world use: Check which branches exist locally and see which one you're currently on (marked with *)."
+                            },
+                            {
+                                command: "git branch <name>",
+                                description: "Creates a new branch.",
+                                example: "Real-world use: Starting work on a new feature? Create a branch: git branch feature-login to isolate your work from the main code."
+                            },
+                            {
+                                command: "git checkout <name>",
+                                description: "Switches to the specified branch.",
+                                example: "Real-world use: Switch to your feature branch to continue work: git checkout feature-login moves you from main to feature-login."
+                            },
+                            {
+                                command: "git switch <name>",
+                                description: "(Modern) A clearer alternative to checkout for switching branches.",
+                                example: "Real-world use: New Git versions prefer this: git switch feature-login is more intuitive than checkout for branch switching."
+                            },
+                            {
+                                command: "git checkout -b <name>",
+                                description: "Combo: Creates a branch and switches to it immediately.",
+                                example: "Real-world use: Quick workflow to start new work: git checkout -b hotfix-payment creates and switches to a new branch in one command."
+                            },
+                            {
+                                command: "git branch -d <name>",
+                                description: "Deletes a branch (safe mode: prevents deleting unmerged work).",
+                                example: "Real-world use: After merging your feature, clean up: git branch -d feature-login removes the branch. Git blocks this if changes aren't merged."
+                            },
+                            {
+                                command: "git branch -D <name>",
+                                description: "Force delete. Deletes a branch even if it has unmerged changes.",
+                                example: "Real-world use: Abandoned an experimental branch? Force delete it: git branch -D experimental-feature removes it even with unmerged work."
+                            },
+                            {
+                                command: "git merge <branch>",
+                                description: "Merges the specified branch into your current branch.",
+                                example: "Real-world use: Feature complete? Switch to main (git checkout main) then merge: git merge feature-login brings your feature into main."
+                            },
+                            {
+                                command: "git merge --abort",
+                                description: "Stops the merge process if conflicts occur and you want to give up.",
+                                example: "Real-world use: Merge conflicts too complex? Abort and try later: git merge --abort cancels the merge and returns to pre-merge state."
+                            },
+                            {
+                                command: "git rebase <branch>",
+                                description: "Reapplies commits on top of another base tip (linear history).",
+                                example: "Real-world use: Keep your feature branch updated with main: git rebase main replays your commits on top of the latest main changes."
+                            }
+                        ]
+                    },
+                    {
+                        id: "remote",
+                        number: "04",
+                        title: "Remote Syncing",
+                        description: "How you send code to GitHub, GitLab, or Bitbucket.",
+                        commands: [
+                            {
+                                command: "git remote -v",
+                                description: "Lists all remote repositories linked to your local project.",
+                                example: "Real-world use: Check where your code will be pushed: git remote -v shows the GitHub/GitLab URLs configured for this project."
+                            },
+                            {
+                                command: "git remote add origin <url>",
+                                description: "Connects your local repo to a remote server.",
+                                example: "Real-world use: Created a repo on GitHub? Link it to your local project: git remote add origin https://github.com/user/project.git"
+                            },
+                            {
+                                command: "git remote remove <name>",
+                                description: "Removes a remote connection.",
+                                example: "Real-world use: Connected to wrong remote? Remove it: git remote remove origin then add the correct one."
+                            },
+                            {
+                                command: "git fetch",
+                                description: "Downloads changes from the remote but does not update your code.",
+                                example: "Real-world use: Check what teammates pushed without changing your code: git fetch downloads updates so you can review them with git log."
+                            },
+                            {
+                                command: "git pull",
+                                description: "Downloads changes and immediately merges them (Fetch + Merge).",
+                                example: "Real-world use: Start your day by syncing with team changes: git pull origin main downloads and merges the latest main branch updates."
+                            },
+                            {
+                                command: "git push -u origin <branch>",
+                                description: "Uploads your commits to the remote branch.",
+                                example: "Real-world use: First time pushing a new branch? git push -u origin feature-login uploads it and sets up tracking for future pushes."
+                            },
+                            {
+                                command: "git push --tags",
+                                description: "Pushes specific version tags to the remote.",
+                                example: "Real-world use: Released version 1.0? Tag it locally (git tag v1.0) then push tags: git push --tags shares release markers with team."
+                            },
+                            {
+                                command: "git push --force",
+                                description: "Dangerous. Overwrites remote history with your local history.",
+                                example: "Real-world use: Rewrote history with rebase? Force push carefully: git push --force. WARNING: This can delete teammates' work if not careful."
+                            }
+                        ]
+                    },
+                    {
+                        id: "inspection",
+                        number: "05",
+                        title: "Inspection & Comparison",
+                        description: "When things break, you need to investigate the history.",
+                        commands: [
+                            {
+                                command: "git log",
+                                description: "Shows the full commit history.",
+                                example: "Real-world use: Review what the team has been working on: git log displays all commits with messages, authors, and dates."
+                            },
+                            {
+                                command: "git log --oneline",
+                                description: "Condensed history (one line per commit).",
+                                example: "Real-world use: Quick overview of recent work: git log --oneline shows just commit IDs and messages for easier scanning."
+                            },
+                            {
+                                command: "git log --graph",
+                                description: "Shows a text-based graph of branching history.",
+                                example: "Real-world use: Visualize complex branch merges: git log --graph --oneline creates an ASCII diagram showing how branches diverged and merged."
+                            },
+                            {
+                                command: "git diff",
+                                description: "Shows differences between working directory and staging area.",
+                                example: "Real-world use: Before staging, review exactly what you changed: git diff shows line-by-line changes in your modified files."
+                            },
+                            {
+                                command: "git diff --staged",
+                                description: "Shows differences between staging area and the last commit.",
+                                example: "Real-world use: After staging but before committing, double-check what will be committed: git diff --staged shows staged changes."
+                            },
+                            {
+                                command: "git blame <file>",
+                                description: "Shows who modified each line of a file and when.",
+                                example: "Real-world use: Found a bug? Use git blame app.js to see who wrote each line and when, helping you understand the context or ask questions."
+                            },
+                            {
+                                command: "git show <commit-id>",
+                                description: "Shows the specific changes (metadata + diff) of a commit.",
+                                example: "Real-world use: Investigating a bug introduced in a specific commit? git show abc123 shows exactly what changed in that commit."
+                            }
+                        ]
+                    },
+                    {
+                        id: "undo",
+                        number: "06",
+                        title: "Undo & Fix (Advanced)",
+                        description: "These commands help you fix mistakes.",
+                        commands: [
+                            {
+                                command: "git reset --soft HEAD~1",
+                                description: "Undoes the last commit but keeps changes in the Staging Area.",
+                                example: "Real-world use: Committed too early? git reset --soft HEAD~1 undoes the commit but leaves your changes staged, ready to re-commit."
+                            },
+                            {
+                                command: "git reset HEAD~1",
+                                description: "Undoes the last commit and moves changes to the Working Directory.",
+                                example: "Real-world use: Want to modify files before re-committing? git reset HEAD~1 undoes the commit and unstages changes for editing."
+                            },
+                            {
+                                command: "git reset --hard HEAD~1",
+                                description: "Destructive. Undoes the last commit and deletes all changes.",
+                                example: "Real-world use: Last commit was completely wrong? git reset --hard HEAD~1 erases it entirely. WARNING: This permanently deletes changes."
+                            },
+                            {
+                                command: "git restore <file>",
+                                description: "Discards local changes to a specific file (modern replacement for checkout).",
+                                example: "Real-world use: Made mistakes in a file? git restore app.js reverts it to the last committed version, discarding all local changes."
+                            },
+                            {
+                                command: "git revert <commit-id>",
+                                description: "Creates a new commit that is the exact opposite of the specified commit (safe for public branches).",
+                                example: "Real-world use: Need to undo a pushed commit safely? git revert abc123 creates a new commit that undoes those changes without rewriting history."
+                            }
+                        ]
+                    }
+                ]
+            },
+            gu: {
+                title: "Git Commands Portal",
+                subtitle: "વાસ્તવિક દુનિયાના ઉદાહરણો સાથે સંપૂર્ણ વ્યાવસાયિક સંદર્ભ",
+                searchPlaceholder: "આદેશો શોધો... (દા.ત., commit, branch, merge)",
+                langButton: "English",
+                expandAll: "📂 બધું વિસ્તૃત કરો",
+                collapseAll: "📁 બધું સંકુચિત કરો",
+                categories: {
+                    all: "તમામ આદેશો",
+                    config: "રૂપરેખાંકન",
+                    workflow: "કાર્યપ્રવાહ",
+                    branching: "શાખા",
+                    remote: "રિમોટ સમન્વય",
+                    inspection: "નિરીક્ષણ",
+                    undo: "રદ કરો અને સુધારો"
+                },
+                sections: [
+                    {
+                        id: "config",
+                        number: "01",
+                        title: "રૂપરેખાંકન અને સેટઅપ",
+                        description: "કોડની એક પંક્તિ લખતા પહેલાં, તમારે તમારું વાતાવરણ ગોઠવવું આવશ્યક છે.",
+                        commands: [
+                            {
+                                command: "git version",
+                                description: "Git નું સ્થાપિત સંસ્કરણ તપાસે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: પ્રોજેક્ટ શરૂ કરતા પહેલાં, Git સ્થાપિત છે કે કેમ તે ચકાસો અને ટીમ ટૂલ્સ સાથે સુસંગતતા સુનિશ્ચિત કરવા માટે તમે કયું સંસ્કરણ ચલાવી રહ્યા છો તે તપાસો."
+                            },
+                            {
+                                command: "git config --global user.name \"Name\"",
+                                description: "તમામ commits માટે તમારી ઓળખ સેટ કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: જ્યારે તમે નવી ટીમમાં જોડાઓ છો, ત્યારે તમારું નામ સેટ કરો જેથી તમારા તમામ commits પ્રોજેક્ટ ઇતિહાસમાં યોગ્ય રીતે તમને આભારી થાય."
+                            },
+                            {
+                                command: "git config --global user.email \"mail\"",
+                                description: "તમારું ઇમેઇલ સરનામું સેટ કરે છે (તમારા GitHub/GitLab ઇમેઇલ સાથે મેળ ખાવો જોઈએ).",
+                                example: "વાસ્તવિક ઉપયોગ: કંપની પ્રોજેક્ટ્સ માટે તમારો કાર્ય ઇમેઇલ અને બાજુના પ્રોજેક્ટ્સ માટે વ્યક્તિગત ઇમેઇલ ગોઠવો. આ સુનિશ્ચિત કરે છે કે commits યોગ્ય એકાઉન્ટ સાથે લિંક થાય છે."
+                            },
+                            {
+                                command: "git config --global color.ui true",
+                                description: "ટર્મિનલમાં સહાયક રંગ હાઇલાઇટિંગ સક્ષમ કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: વિવિધ પ્રકારની માહિતીને રંગીન કરીને Git આઉટપુટને વાંચવું સરળ બનાવે છે (લીલામાં ઉમેરાઓ, લાલમાં કાઢી નાખવા, વગેરે)."
+                            },
+                            {
+                                command: "git config --list",
+                                description: "હાલમાં લાગુ તમામ રૂપરેખાંકન સેટિંગ્સની સૂચિ બનાવે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: સમસ્યાઓનું નિવારણ કરતી વખતે અથવા નવા મશીનને ઓનબોર્ડ કરતી વખતે, બધું યોગ્ય રીતે ગોઠવેલું છે તે સુનિશ્ચિત કરવા માટે તમારી બધી Git સેટિંગ્સની સમીક્ષા કરો."
+                            },
+                            {
+                                command: "git init",
+                                description: "વર્તમાન ફોલ્ડરમાં નવો, ખાલી Git repository પ્રારંભ કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: શરૂઆતથી નવો પ્રોજેક્ટ શરૂ કરો છો? Git સાથે ફેરફારો ટ્રેક કરવાનું શરૂ કરવા માટે તમારા પ્રોજેક્ટ ફોલ્ડરમાં આ ચલાવો."
+                            },
+                            {
+                                command: "git clone <url>",
+                                description: "રિમોટ સર્વર (જેમ કે GitHub) થી હાલની repository ડાઉનલોડ કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: તમારી ટીમ પાસે GitHub પર પ્રોજેક્ટ છે. યોગદાન આપવાનું શરૂ કરવા માટે તેને તમારા મશીન પર ક્લોન કરો: git clone https://github.com/company/project.git"
+                            }
+                        ]
+                    },
+                    {
+                        id: "workflow",
+                        number: "02",
+                        title: "મુખ્ય કાર્યપ્રવાહ (Stage & Commit)",
+                        description: "આ તે ચક્ર છે જેને તમે દિવસમાં ડઝનેક વખત પુનરાવર્તિત કરશો: સંશોધિત કરો → સ્ટેજ કરો → Commit કરો.",
+                        commands: [
+                            {
+                                command: "git status",
+                                description: "મહત્વપૂર્ણ. બતાવે છે કે કઈ ફાઇલો સંશોધિત, સ્ટેજ્ડ અથવા અનટ્રેક્ડ છે.",
+                                example: "વાસ્તવિક ઉપયોગ: ફાઇલો સંપાદિત કર્યા પછી, commit કરતા પહેલાં શું બદલાયું તે જોવા માટે આ ચલાવો. ખોટી ફાઇલો commit કરવાનું ટાળવા માટે તે તમારી સલામતી તપાસ છે."
+                            },
+                            {
+                                command: "git add <file>",
+                                description: "staging વિસ્તારમાં ચોક્કસ ફાઇલ ઉમેરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: તમે app.js માં બગ ઠીક કર્યો છે. ફક્ત તે ફાઇલને સ્ટેજ કરો: git add app.js, જેથી તમે અન્ય અધૂરા કામ વિના ફક્ત બગ ફિક્સ commit કરી શકો."
+                            },
+                            {
+                                command: "git add .",
+                                description: "વર્તમાન ડિરેક્ટરીમાં બધી બદલાયેલી ફાઇલોને staging માં ઉમેરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: તમે એક વિશેષતા પૂર્ણ કરી છે જેણે બહુવિધ ફાઇલોને સ્પર્શ કર્યો છે. commit કરતા પહેલાં તે બધાને એક સાથે ઉમેરો: git add ."
+                            },
+                            {
+                                command: "git add -p",
+                                description: "પેચ મોડ. તમને ફાઇલના ભાગોને ઇન્ટરેક્ટિવ રીતે સ્ટેજ કરવાની મંજૂરી આપે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: તમે એક ફાઇલમાં બે અલગ સુધારા કર્યા છે. દરેક સુધારાને અલગથી સ્ટેજ કરવા માટે git add -p નો ઉપયોગ કરો, વધુ સ્વચ્છ, વધુ કેન્દ્રિત commits બનાવો."
+                            },
+                            {
+                                command: "git rm <file>",
+                                description: "કાર્યકારી ડિરેક્ટરી અને index બંનેમાંથી ફાઇલ કાઢી નાખે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: પ્રોજેક્ટમાંથી અપ્રચલિત config ફાઇલ દૂર કરવી: git rm old-config.json આગામી commit માટે કાઢી નાખવાને સ્ટેજ કરે છે."
+                            },
+                            {
+                                command: "git rm --cached <file>",
+                                description: "Git ટ્રેકિંગમાંથી ફાઇલ દૂર કરે છે પરંતુ તમારી સ્થાનિક ડિસ્ક પર તેને રાખે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: તમે આકસ્મિક રીતે secrets સાથે .env commit કર્યો છે. તમારી સ્થાનિક નકલ સુરક્ષિત રાખતી વખતે તેને અનટ્રેક કરવા માટે git rm --cached .env નો ઉપયોગ કરો."
+                            },
+                            {
+                                command: "git commit -m \"Message\"",
+                                description: "સંદેશ સાથે સ્નેપશોટ રેકોર્ડ કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: ફાઇલો સ્ટેજ કર્યા પછી, તમારા ફેરફારો સાચવો: git commit -m \"Fix login bug\" પ્રોજેક્ટ ઇતિહાસમાં કાયમી રેકોર્ડ બનાવે છે."
+                            },
+                            {
+                                command: "git commit -am \"Message\"",
+                                description: "એક આદેશમાં git add અને git commit ને શોર્ટકટ કરે છે (ફક્ત ટ્રેક કરેલી ફાઇલો).",
+                                example: "વાસ્તવિક ઉપયોગ: પહેલેથી જ ટ્રેક કરેલી ફાઇલોમાં નાના ફેરફારો માટે ઝડપી commits: git commit -am \"Update README\" staging પગલું છોડી દે છે."
+                            },
+                            {
+                                command: "git commit --amend",
+                                description: "છેલ્લા commit ને સંશોધિત કરે છે (સંદેશમાં ટાઇપો ઠીક કરવા માટે ઉપયોગી).",
+                                example: "વાસ્તવિક ઉપયોગ: હમણાં જ commit કર્યો પરંતુ ફાઇલ ભૂલી ગયા? તેને સ્ટેજ કરો અને નવો બનાવ્યા વિના તેને અગાઉના commit માં ઉમેરવા માટે git commit --amend ચલાવો."
+                            }
+                        ]
+                    },
+                    {
+                        id: "branching",
+                        number: "03",
+                        title: "શાખા અને મર્જિંગ",
+                        description: "શાખા તમને મુખ્ય કોડને તોડ્યા વિના નવી સુવિધાઓ પર કામ કરવાની મંજૂરી આપે છે.",
+                        commands: [
+                            {
+                                command: "git branch",
+                                description: "બધી સ્થાનિક શાખાઓની સૂચિ બનાવે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: તપાસો કે કઈ શાખાઓ સ્થાનિક રીતે અસ્તિત્વમાં છે અને જુઓ કે તમે હાલમાં કઈ પર છો (* સાથે ચિહ્નિત)."
+                            },
+                            {
+                                command: "git branch <name>",
+                                description: "નવી શાખા બનાવે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: નવી સુવિધા પર કામ શરૂ કરો છો? એક શાખા બનાવો: git branch feature-login મુખ્ય કોડથી તમારા કામને અલગ કરવા માટે."
+                            },
+                            {
+                                command: "git checkout <name>",
+                                description: "નિર્દિષ્ટ શાખા પર સ્વિચ કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: કામ ચાલુ રાખવા માટે તમારી વિશેષતા શાખા પર સ્વિચ કરો: git checkout feature-login તમને main થી feature-login પર ખસેડે છે."
+                            },
+                            {
+                                command: "git switch <name>",
+                                description: "(આધુનિક) શાખાઓ સ્વિચ કરવા માટે checkout નો વધુ સ્પષ્ટ વિકલ્પ.",
+                                example: "વાસ્તવિક ઉપયોગ: નવા Git સંસ્કરણો આને પસંદ કરે છે: git switch feature-login શાખા સ્વિચિંગ માટે checkout કરતાં વધુ સહજ છે."
+                            },
+                            {
+                                command: "git checkout -b <name>",
+                                description: "કોમ્બો: શાખા બનાવે છે અને તરત જ તેના પર સ્વિચ કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: નવું કામ શરૂ કરવા માટે ઝડપી કાર્યપ્રવાહ: git checkout -b hotfix-payment એક આદેશમાં નવી શાખા બનાવે છે અને તેના પર સ્વિચ કરે છે."
+                            },
+                            {
+                                command: "git branch -d <name>",
+                                description: "શાખા કાઢી નાખે છે (સલામત મોડ: અનમર્જ્ડ કામ કાઢી નાખવાનું અટકાવે છે).",
+                                example: "વાસ્તવિક ઉપયોગ: તમારી સુવિધાને મર્જ કર્યા પછી, સાફ કરો: git branch -d feature-login શાખા દૂર કરે છે. જો ફેરફારો મર્જ કરેલા નથી તો Git આને અવરોધિત કરે છે."
+                            },
+                            {
+                                command: "git branch -D <name>",
+                                description: "બળજબરીથી કાઢી નાખો. જો તેમાં અનમર્જ્ડ ફેરફારો હોય તો પણ શાખા કાઢી નાખે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: પ્રાયોગિક શાખા છોડી દીધી? તેને બળજબરીથી કાઢી નાખો: git branch -D experimental-feature તેને અનમર્જ્ડ કામ સાથે પણ દૂર કરે છે."
+                            },
+                            {
+                                command: "git merge <branch>",
+                                description: "નિર્દિષ્ટ શાખાને તમારી વર્તમાન શાખામાં મર્જ કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: સુવિધા પૂર્ણ થઈ? main પર સ્વિચ કરો (git checkout main) પછી મર્જ કરો: git merge feature-login તમારી સુવિધાને main માં લાવે છે."
+                            },
+                            {
+                                command: "git merge --abort",
+                                description: "જો સંઘર્ષો થાય અને તમે છોડી દેવા માંગતા હો તો મર્જ પ્રક્રિયા બંધ કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: મર્જ સંઘર્ષો ખૂબ જટિલ? રદ કરો અને પછીથી પ્રયાસ કરો: git merge --abort મર્જ રદ કરે છે અને પૂર્વ-મર્જ સ્થિતિમાં પાછા ફરે છે."
+                            },
+                            {
+                                command: "git rebase <branch>",
+                                description: "અન્ય આધાર ટોચ પર commits ફરીથી લાગુ કરે છે (રેખીય ઇતિહાસ).",
+                                example: "વાસ્તવિક ઉપયોગ: તમારી વિશેષતા શાખાને main સાથે અપડેટ રાખો: git rebase main તમારા commits ને નવીનતમ main ફેરફારોની ટોચ પર ફરીથી ચલાવે છે."
+                            }
+                        ]
+                    },
+                    {
+                        id: "remote",
+                        number: "04",
+                        title: "રિમોટ સમન્વય",
+                        description: "તમે GitHub, GitLab અથવા Bitbucket પર કોડ કેવી રીતે મોકલો છો.",
+                        commands: [
+                            {
+                                command: "git remote -v",
+                                description: "તમારા સ્થાનિક પ્રોજેક્ટ સાથે લિંક કરેલી બધી રિમોટ repositories ની સૂચિ બનાવે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: તપાસો કે તમારો કોડ ક્યાં push કરવામાં આવશે: git remote -v આ પ્રોજેક્ટ માટે ગોઠવેલા GitHub/GitLab URLs બતાવે છે."
+                            },
+                            {
+                                command: "git remote add origin <url>",
+                                description: "તમારી સ્થાનિક repo ને રિમોટ સર્વર સાથે જોડે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: GitHub પર repo બનાવી? તેને તમારા સ્થાનિક પ્રોજેક્ટ સાથે લિંક કરો: git remote add origin https://github.com/user/project.git"
+                            },
+                            {
+                                command: "git remote remove <name>",
+                                description: "રિમોટ કનેક્શન દૂર કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: ખોટા remote સાથે કનેક્ટ થયેલ? તેને દૂર કરો: git remote remove origin પછી યોગ્ય ઉમેરો."
+                            },
+                            {
+                                command: "git fetch",
+                                description: "remote થી ફેરફારો ડાઉનલોડ કરે છે પરંતુ તમારો કોડ અપડેટ કરતું નથી.",
+                                example: "વાસ્તવિક ઉપયોગ: તમારો કોડ બદલ્યા વિના ટીમમેટ્સે શું push કર્યું તે તપાસો: git fetch અપડેટ્સ ડાઉનલોડ કરે છે જેથી તમે git log સાથે તેમની સમીક્ષા કરી શકો."
+                            },
+                            {
+                                command: "git pull",
+                                description: "ફેરફારો ડાઉનલોડ કરે છે અને તરત જ તેમને મર્જ કરે છે (Fetch + Merge).",
+                                example: "વાસ્તવિક ઉપયોગ: ટીમ ફેરફારો સાથે સમન્વયન કરીને તમારા દિવસની શરૂઆત કરો: git pull origin main નવીનતમ main શાખા અપડેટ્સ ડાઉનલોડ અને મર્જ કરે છે."
+                            },
+                            {
+                                command: "git push -u origin <branch>",
+                                description: "તમારા commits ને remote શાખા પર અપલોડ કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: પ્રથમ વખત નવી શાખા push કરી રહ્યા છો? git push -u origin feature-login તેને અપલોડ કરે છે અને ભવિષ્યના pushes માટે ટ્રેકિંગ સેટ કરે છે."
+                            },
+                            {
+                                command: "git push --tags",
+                                description: "remote પર ચોક્કસ સંસ્કરણ ટેગ્સ push કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: સંસ્કરણ 1.0 રિલીઝ કર્યું? તેને સ્થાનિક રીતે ટેગ કરો (git tag v1.0) પછી ટેગ્સ push કરો: git push --tags ટીમ સાથે રિલીઝ માર્કર્સ શેર કરે છે."
+                            },
+                            {
+                                command: "git push --force",
+                                description: "જોખમી. તમારા સ્થાનિક ઇતિહાસ સાથે remote ઇતિહાસ ઓવરરાઇટ કરે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: rebase સાથે ઇતિહાસ ફરીથી લખ્યો? કાળજીપૂર્વક force push કરો: git push --force. ચેતવણી: જો કાળજી ન લેવામાં આવે તો આ ટીમમેટ્સનું કામ કાઢી શકે છે."
+                            }
+                        ]
+                    },
+                    {
+                        id: "inspection",
+                        number: "05",
+                        title: "નિરીક્ષણ અને તુલના",
+                        description: "જ્યારે વસ્તુઓ તૂટે છે, ત્યારે તમારે ઇતિહાસની તપાસ કરવાની જરૂર છે.",
+                        commands: [
+                            {
+                                command: "git log",
+                                description: "સંપૂર્ણ commit ઇતિહાસ બતાવે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: ટીમ શું કામ કરી રહી છે તેની સમીક્ષા કરો: git log સંદેશો, લેખકો અને તારીખો સાથે તમામ commits પ્રદર્શિત કરે છે."
+                            },
+                            {
+                                command: "git log --oneline",
+                                description: "સંક્ષિપ્ત ઇતિહાસ (commit દીઠ એક લાઇન).",
+                                example: "વાસ્તવિક ઉપયોગ: તાજેતરના કામની ઝડપી વિહંગાવલોકન: git log --oneline સરળ સ્કેનિંગ માટે ફક્ત commit IDs અને સંદેશાઓ બતાવે છે."
+                            },
+                            {
+                                command: "git log --graph",
+                                description: "શાખા ઇતિહાસનો ટેક્સ્ટ-આધારિત ગ્રાફ બતાવે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: જટિલ શાખા મર્જ કલ્પના કરો: git log --graph --oneline એક ASCII ડાયાગ્રામ બનાવે છે જે બતાવે છે કે શાખાઓ કેવી રીતે અલગ અને મર્જ થઈ."
+                            },
+                            {
+                                command: "git diff",
+                                description: "કાર્યકારી ડિરેક્ટરી અને staging વિસ્તાર વચ્ચે તફાવતો બતાવે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: staging કરતા પહેલાં, તમે બરાબર શું બદલ્યું તે સમીક્ષા કરો: git diff તમારી સંશોધિત ફાઇલોમાં લાઇન-દર-લાઇન ફેરફારો બતાવે છે."
+                            },
+                            {
+                                command: "git diff --staged",
+                                description: "staging વિસ્તાર અને છેલ્લા commit વચ્ચે તફાવતો બતાવે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: staging પછી પરંતુ commit કરતા પહેલાં, શું commit કરવામાં આવશે તે બે વાર તપાસો: git diff --staged staged ફેરફારો બતાવે છે."
+                            },
+                            {
+                                command: "git blame <file>",
+                                description: "ફાઇલની દરેક લાઇનને કોણે સંશોધિત કરી અને ક્યારે તે બતાવે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: બગ મળ્યો? દરેક લાઇન કોણે લખી અને ક્યારે તે જોવા માટે git blame app.js નો ઉપયોગ કરો, તમને સંદર્ભ સમજવામાં અથવા પ્રશ્નો પૂછવામાં મદદ કરે છે."
+                            },
+                            {
+                                command: "git show <commit-id>",
+                                description: "commit ના ચોક્કસ ફેરફારો (metadata + diff) બતાવે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: ચોક્કસ commit માં રજૂ કરાયેલી બગની તપાસ કરી રહ્યા છો? git show abc123 બતાવે છે કે તે commit માં બરાબર શું બદલાયું."
+                            }
+                        ]
+                    },
+                    {
+                        id: "undo",
+                        number: "06",
+                        title: "રદ કરો અને સુધારો (અદ્યતન)",
+                        description: "આ આદેશો તમને ભૂલો સુધારવામાં મદદ કરે છે.",
+                        commands: [
+                            {
+                                command: "git reset --soft HEAD~1",
+                                description: "છેલ્લા commit ને રદ કરે છે પરંતુ Staging Area માં ફેરફારો રાખે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: ખૂબ જલ્દી commit કર્યો? git reset --soft HEAD~1 commit રદ કરે છે પરંતુ તમારા ફેરફારો staged રાખે છે, ફરીથી commit કરવા માટે તૈયાર."
+                            },
+                            {
+                                command: "git reset HEAD~1",
+                                description: "છેલ્લા commit ને રદ કરે છે અને ફેરફારોને Working Directory માં ખસેડે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: ફરીથી commit કરતા પહેલાં ફાઇલો સંશોધિત કરવા માંગો છો? git reset HEAD~1 commit રદ કરે છે અને સંપાદન માટે ફેરફારો unstage કરે છે."
+                            },
+                            {
+                                command: "git reset --hard HEAD~1",
+                                description: "વિનાશક. છેલ્લા commit ને રદ કરે છે અને બધા ફેરફારો કાઢી નાખે છે.",
+                                example: "વાસ્તવિક ઉપયોગ: છેલ્લો commit સંપૂર્ણપણે ખોટો હતો? git reset --hard HEAD~1 તેને સંપૂર્ણપણે ભૂંસી નાખે છે. ચેતવણી: આ કાયમી રીતે ફેરફારો કાઢી નાખે છે."
+                            },
+                            {
+                                command: "git restore <file>",
+                                description: "ચોક્કસ ફાઇલના સ્થાનિક ફેરફારો કાઢી નાખે છે (checkout નો આધુનિક વિકલ્પ).",
+                                example: "વાસ્તવિક ઉપયોગ: ફાઇલમાં ભૂલો કરી? git restore app.js તેને છેલ્લા committed સંસ્કરણ પર પાછું લાવે છે, બધા સ્થાનિક ફેરફારો કાઢી નાખે છે."
+                            },
+                            {
+                                command: "git revert <commit-id>",
+                                description: "નવો commit બનાવે છે જે નિર્દિષ્ટ commit ની બરાબર વિપરીત છે (જાહેર શાખાઓ માટે સુરક્ષિત).",
+                                example: "વાસ્તવિક ઉપયોગ: pushed commit ને સુરક્ષિત રીતે રદ કરવાની જરૂર છે? git revert abc123 એક નવો commit બનાવે છે જે ઇતિહાસ ફરીથી લખ્યા વિના તે ફેરફારોને રદ કરે છે."
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        let currentLang = 'en';
+        let currentCategory = 'all';
+        let expandedCards = new Set();
+
+        function render() {
+            const data = gitCommands[currentLang];
+
+            // Update header
+            document.getElementById('mainTitle').textContent = data.title;
+            document.getElementById('subtitle').textContent = data.subtitle;
+            document.getElementById('searchInput').placeholder = data.searchPlaceholder;
+            document.getElementById('langText').textContent = data.langButton;
+            document.getElementById('expandAll').innerHTML = data.expandAll;
+            document.getElementById('collapseAll').innerHTML = data.collapseAll;
+
+            // Update category buttons
+            const categoryNav = document.getElementById('categoryNav');
+            categoryNav.innerHTML = '';
+            Object.entries(data.categories).forEach(([key, label]) => {
+                const btn = document.createElement('button');
+                btn.className = `category-btn ${currentCategory === key ? 'active' : ''}`;
+                btn.textContent = label;
+                btn.dataset.category = key;
+                categoryNav.appendChild(btn);
+            });
+
+            // Render sections
+            renderCommands();
+        }
+
+        function renderCommands(searchQuery = '') {
+            const data = gitCommands[currentLang];
+            const container = document.getElementById('commandsContainer');
+            container.innerHTML = '';
+
+            let filteredSections = data.sections;
+            if (currentCategory !== 'all') {
+                filteredSections = data.sections.filter(s => s.id === currentCategory);
+            }
+
+            if (searchQuery) {
+                filteredSections = filteredSections.map(section => ({
+                    ...section,
+                    commands: section.commands.filter(cmd =>
+                        cmd.command.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        cmd.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        cmd.example.toLowerCase().includes(searchQuery.toLowerCase())
+                    )
+                })).filter(section => section.commands.length > 0);
+            }
+
+            if (filteredSections.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <div class="no-results-icon">🔍</div>
+                        <h3>No commands found</h3>
+                        <p>Try a different search term or category</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredSections.forEach((section, sectionIndex) => {
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'command-section';
+                sectionEl.style.animationDelay = `${sectionIndex * 0.1}s`;
+
+                const exampleLabel = currentLang === 'en' ? 'Real-World Example' : 'વાસ્તવિક દુનિયાનું ઉદાહરણ';
+
+                sectionEl.innerHTML = `
+                    <div class="section-header">
+                        <div class="section-number">${section.number}</div>
+                        <h2>${section.title}</h2>
+                    </div>
+                    <p class="section-description">${section.description}</p>
+                    <div class="command-grid">
+                        ${section.commands.map((cmd, cmdIndex) => `
+                            <div class="command-card ${expandedCards.has(cmd.command) ? 'expanded' : ''}" data-command="${cmd.command}">
+                                <div class="command-header">
+                                    <code class="command-code">${cmd.command}</code>
+                                    <button class="copy-btn" data-command="${cmd.command}" title="Copy command">
+                                        📋
+                                    </button>
+                                </div>
+                                <p class="command-description">${cmd.description}</p>
+                                <button class="expand-icon" style="background: none; border: none; cursor: pointer; color: var(--text-muted); margin-top: 0.5rem;">
+                                    ▼
+                                </button>
+                                <div class="command-example">
+                                    <div class="example-label">${exampleLabel}</div>
+                                    <div class="example-text">${cmd.example}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(sectionEl);
+            });
+
+            // Add event listeners
+            addEventListeners();
+        }
+
+        function addEventListeners() {
+            // Copy buttons
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const command = btn.dataset.command;
+                    navigator.clipboard.writeText(command).then(() => {
+                        showToast();
+                        btn.textContent = '✓';
+                        btn.classList.add('copied');
+                        setTimeout(() => {
+                            btn.textContent = '📋';
+                            btn.classList.remove('copied');
+                        }, 2000);
+                    });
+                });
+            });
+
+            // Expand cards
+            document.querySelectorAll('.command-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('copy-btn')) return;
+                    const command = card.dataset.command;
+                    if (expandedCards.has(command)) {
+                        expandedCards.delete(command);
+                    } else {
+                        expandedCards.add(command);
+                    }
+                    card.classList.toggle('expanded');
+                });
+            });
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Event listeners
+        document.getElementById('langToggle').addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'gu' : 'en';
+            render();
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            renderCommands(e.target.value);
+        });
+
+        document.getElementById('categoryNav').addEventListener('click', (e) => {
+            if (e.target.classList.contains('category-btn')) {
+                currentCategory = e.target.dataset.category;
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                e.target.classList.add('active');
+                renderCommands(document.getElementById('searchInput').value);
+            }
+        });
+
+        document.getElementById('expandAll').addEventListener('click', () => {
+            const cards = document.querySelectorAll('.command-card');
+            cards.forEach(card => {
+                const command = card.dataset.command;
+                expandedCards.add(command);
+                card.classList.add('expanded');
+            });
+        });
+
+        document.getElementById('collapseAll').addEventListener('click', () => {
+            const cards = document.querySelectorAll('.command-card');
+            cards.forEach(card => {
+                card.classList.remove('expanded');
+            });
+            expandedCards.clear();
+        });
+
+        // Initial render
+        render();
+    </script>
+</body>
+</html>
